@@ -1,0 +1,8 @@
+//
+// Created by leonard on 6/2/20.
+//
+
+#ifndef LABO_6_INDEXATION_BOOK_INDEX_H
+#define LABO_6_INDEXATION_BOOK_INDEX_H
+
+#endif //LABO_6_INDEXATION_BOOK_INDEX_H
