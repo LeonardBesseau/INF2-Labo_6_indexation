@@ -1,17 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "list.h"
+#include "index_list.h"
+#include "heading.h"
+
+
 int main() {
-    List* a = createEmptyList();
-    int test = 3;
-    int test1 = 4;
-    int test2 = 5;
-    appendList(a, (void *) test);
-    appendList(a, (void *) test1);
-    appendList(a, (void *) test2);
-    printf("%d", (int) (int*) listBegin(a));
-    printf("%d", (int) (int*) listLast(a));
-    printf("Hello, World!\n");
-    deleteList(a);
+    IndexList* a = createEmptyIndexList(compareIndex);
+    int arr[3] ={1,2,3};
+    appendIndexList(a, arr[0]);
+    appendIndexList(a, arr[1]);
+    appendIndexList(a, arr[2]);
+    printf("%d", indexListBegin(a));
+    printf("%d", indexListLast(a));
+    printf("%d", indexListContains(a, 4));
+    deleteIndexList(a);
     return 0;
 }

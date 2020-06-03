@@ -4,10 +4,17 @@
 
 #ifndef LABO_6_INDEXATION_HEADING_H
 #define LABO_6_INDEXATION_HEADING_H
-#include "list.h"
+
+#include <stdbool.h>
+
 
 typedef struct BookHeading Heading;
 
-Heading* createHeading(char* word);
+
+Heading *createHeading(const char* word);
+
+void displayHeading(Heading* h);
+
+bool addHeadingEntry(Heading *l, int value);
 
 #endif //LABO_6_INDEXATION_HEADING_H
