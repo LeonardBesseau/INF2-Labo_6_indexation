@@ -15,27 +15,41 @@ Compilateur : gcc version 7.4.0
 #define LABO_6_INDEXATION_INDEX_LIST_H
 
 #include <stdbool.h>
+#include <stdlib.h>
+#include "heading_decl.h"
 
+typedef struct LinkedList List;
 
-typedef struct LinkedIndexList IndexList;
+typedef enum {
+    VALUE, HEADING
+} Type;
 
+int frontValue(const List *l);
 
-IndexList *createEmptyIndexList(int (*cmp) (const int *, const int*));
+int backValue(const List *l);
 
-void deleteIndexList(IndexList *l);
+Heading *frontHeading(const List *l);
 
-bool isIndexListEmpty(const IndexList *l);
+Heading *backHeading(const List *l);
 
-bool appendIndexList(IndexList *l, int value);
+List *createEmptyList(Type type);
 
-int indexListBegin(const IndexList *l);
+bool isListEmpty(const List *l);
 
-int indexListLast(const IndexList *l);
+size_t listSize(const List *l);
 
-bool indexListContains(const IndexList *l, int value);
+bool pushValueFront(List *l, int value);
 
-int compareIndex(const int* lhs, const int* rhs);
+bool pushHeadingFront(List *l, Heading *heading);
 
-void displayIndexList(const IndexList *l);
+bool pushValueBack(List *l, int value);
+
+bool pushHeadingBack(List *l, Heading *heading);
+
+void pop_front(List *l);
+
+void pop_back(List *l);
+
+void deleteList(List* l);
 
 #endif //LABO_6_INDEXATION_INDEX_LIST_H

@@ -1,112 +1,88 @@
-/* ---------------------------
-Laboratoire :
-Fichier : list.c
-Auteur(s) : Besseau
-Date : 02-06-2020
-
-But :
-
-Remarque(s) :
-
-Compilateur : gcc version 7.4.0
-
---------------------------- */
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "index_list.h"
 
-typedef struct LinkedIndexNode IndexNode;
 
-IndexNode *createIndexNode(IndexNode *next, IndexNode *prev, int value);
+typedef struct LinkedNode Node;
 
-IndexNode *nextIndex(IndexNode *current);
 
-IndexNode *prevIndex(IndexNode *current);
-
-int getIndex(IndexNode *node);
-
-IndexNode *beginIndexNode(const IndexList *l);
-
-IndexNode *endIndexNode(const IndexList *l);
-
-bool insertNode(IndexNode *m, int value);
-
-void eraseIndexNode(IndexNode *m);
-
-struct LinkedIndexNode {
-    IndexNode *next;
-    IndexNode *prev;
-    int value;
+struct LinkedNode {
+    Node *next;
+    Node *prev;
+    Type type;
+    union {
+        int value;
+        Heading *heading;
+    } data;
 };
 
-struct LinkedIndexList {
-    IndexNode *apad;
+struct LinkedList {
+    Node *apad;
+    Type type;
     size_t size;
-    int (*cmp)(const int *, const int *);
 };
 
 
-IndexList *createEmptyIndexList(int (*cmp)(const int *, const int *)) {
-    IndexList *out = (IndexList *) malloc(sizeof(IndexList));
-    if (out) {
-        out->apad = createIndexNode(NULL, NULL, NULL);
-        out->apad->next = out->apad;
-        out->apad->prev = out->apad;
-        out->cmp = cmp;
-        out->size =0;
-        return out;
-    } else {
-        return NULL;
-    }
+Node *createHeadingNode(Node *next, Node *prev, Heading *heading);
 
-}
+Node *createValueNode(Node *next, Node *prev, int value);
 
-IndexNode *createIndexNode(IndexNode *next, IndexNode *prev, int value) {
-    IndexNode *output = (IndexNode *) malloc(sizeof(IndexNode));
+void eraseNode(Node *m);
+
+Node *beginNode(const List* l);
+
+Node *endNode(const List* l);
+
+bool insertValueNode(Node *m, int value);
+
+bool insertHeadingNode(Node *m, Heading *heading);
+
+Node *createHeadingNode(Node *next, Node *prev, Heading *heading) {
+    Node *output = (Node *) malloc(sizeof(Node));
     if (output) {
         output->next = next;
         output->prev = prev;
-        output->value = value;
+        output->type = HEADING;
+        output->data.heading = heading;
         return output;
     } else {
         return NULL;
     }
 }
 
-IndexNode *nextIndex(IndexNode *current) {
-    if (current) {
-        return current->next;
+Node *createValueNode(Node *next, Node *prev, int value) {
+    Node *output = (Node *) malloc(sizeof(Node));
+    if (output) {
+        output->next = next;
+        output->prev = prev;
+        output->type = VALUE;
+        output->data.value = value;
+        return output;
     } else {
-        return current;
+        return NULL;
     }
 }
 
-IndexNode *prevIndex(IndexNode *current) {
-    if (current) {
-        return current->prev;
-    } else {
-        return current;
+void eraseNode(Node *m) {
+    if (m) {
+        m->prev->next = m->next;
+        m->next->prev = m->prev;
+        if (m->type == HEADING) {
+            free(m->data.heading);
+        }
+        free(m);
     }
 }
 
-int getIndex(IndexNode *node) {
-    if (node) {
-        return node->value;
-    }
-}
-
-IndexNode *beginIndexNode(const IndexList *l) {
+Node *beginNode(const List* l){
     return l->apad->next;
 }
 
-IndexNode *endIndexNode(const IndexList *l) {
+Node *endNode(const List* l){
     return l->apad;
 }
 
-bool insertNode(IndexNode *m, int value) {
-    IndexNode *prev = m->prev;
-    IndexNode *new = (IndexNode *) createIndexNode(m, prev, value);
+bool insertValueNode(Node *m, int value){
+    Node *prev = m->prev;
+    Node *new = (Node *) createValueNode(m, prev, value);
     if (new) {
         prev->next = new;
         m->prev = new;
@@ -116,77 +92,128 @@ bool insertNode(IndexNode *m, int value) {
     }
 }
 
-void eraseIndexNode(IndexNode *m) {
-    if (m) {
-        m->prev->next = m->next;
-        m->next->prev = m->prev;
-        free(m);
+bool insertHeadingNode(Node *m, Heading *heading){
+    Node *prev = m->prev;
+    Node *new = (Node *) createHeadingNode(m, prev, heading);
+    if (new) {
+        prev->next = new;
+        m->prev = new;
+        return true;
+    } else {
+        return false;
     }
 }
 
-void deleteIndexList(IndexList *l) {
-    while (!isIndexListEmpty(l)) {
-        eraseIndexNode(l->apad->next);
+List *createEmptyList(Type type) {
+    List *out = (List *) malloc(sizeof(List));
+    if (out) {
+        if (type == VALUE) {
+            out->apad = createValueNode(NULL, NULL, -1);
+        } else {
+            out->apad = createHeadingNode(NULL, NULL, NULL);
+        }
+        if (out->apad) {
+            out->size = 0;
+            out->apad->next = out->apad;
+            out->apad->prev = out->apad;
+            return out;
+        }
+        //if apad creation failed release memory
+        free(out);
+    }
+    return NULL;
+}
+
+bool isListEmpty(const List *l) {
+    return beginNode(l) == endNode(l);
+}
+
+size_t listSize(const List *l){
+    return l->size;
+}
+
+int frontValue(const List *l){
+    if (l->type == VALUE) {
+        if (!isListEmpty(l)){
+            Node *n = beginNode(l);
+            return n->data.value;
+        }
+    }
+    return -1;
+}
+
+int backValue(const List *l){
+    if (l->type == VALUE) {
+        if (!isListEmpty(l)){
+            Node *n = endNode(l)->prev;
+            return n->data.value;
+        }
+    }
+    return -1;
+}
+
+Heading *frontHeading(const List *l){
+    if (l->type == HEADING) {
+        if (!isListEmpty(l)){
+            Node *n = beginNode(l);
+            return n->data.heading;
+        }
+    }
+    return NULL;
+}
+
+Heading *backHeading(const List *l){
+    if (l->type == VALUE) {
+        if (!isListEmpty(l)){
+            Node *n = endNode(l)->prev;
+            return n->data.heading;
+        }
+    }
+    return NULL;
+}
+
+bool pushValueFront(List *l, int value){
+    bool result = insertValueNode(beginNode(l), value);
+    l->size = result ? l->size+1: l->size;
+    return result;
+}
+
+bool pushHeadingFront(List *l, Heading* heading){
+    bool result = insertHeadingNode(beginNode(l), heading);
+    l->size = result ? l->size+1: l->size;
+    return result;
+}
+
+bool pushValueBack(List *l, int value){
+    bool result = insertValueNode(endNode(l), value);
+    l->size = result ? l->size+1: l->size;
+    return result;
+}
+
+bool pushHeadingBack(List *l, Heading* heading){
+    bool result = insertHeadingNode(endNode(l), heading);
+    l->size = result ? l->size+1: l->size;
+    return result;
+}
+
+void pop_front(List *l){
+    if (!isListEmpty(l)){
+        eraseNode(beginNode(l));
+    }
+}
+
+void pop_back(List *l){
+    if (!isListEmpty(l)){
+        eraseNode(endNode(l));
+    }
+}
+
+void deleteList(List* l){
+    while (!isListEmpty(l)) {
+        eraseNode(l->apad->next);
     }
     free(l->apad);
     free(l);
 }
 
-bool isIndexListEmpty(const IndexList *l) {
-    return beginIndexNode(l) == endIndexNode(l);
-}
-
-bool appendIndexList(IndexList *l, int value) {
-    bool result = insertNode(endIndexNode(l), value);
-    if (result){
-        ++l->size;
-        return result;
-    } else{
-        return false;
-    }
-
-}
-
-int indexListBegin(const IndexList *l) {
-    if (!isIndexListEmpty(l)) {
-        return beginIndexNode(l)->value;
-    }
-    return -1;
-}
-
-int indexListLast(const IndexList *l) {
-    if (!isIndexListEmpty(l)) {
-        return l->apad->prev->value;
-    }
-    return -1;
-}
-
-int compareIndex(const int* lhs, const int* rhs){
-    if(*lhs < *rhs){
-        return -1;
-    }else if(*lhs == *rhs){
-        return 0;
-    }{
-        return 1;
-    }
-}
-
-bool indexListContains(const IndexList *l, int value){
-    IndexNode *cur = beginIndexNode(l);
-    while (cur != endIndexNode(l)){
-        if (value == cur->value){
-            return true;
-        }
-        cur = cur->next;
-    }
-    return false;
-}
-
-void displayIndexList(const IndexList *l){
-    IndexNode *cur = beginIndexNode(l);
-    while (cur != endIndexNode(l)){
-        printf("%d, ",cur->value);
-        cur = cur->next;
-    }
-}
 
