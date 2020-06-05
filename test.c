@@ -1,9 +1,10 @@
+//
+// Created by leonard on 6/5/20.
+//
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "list.h"
-#include "heading.h"
 
 char *strlwr(char *str) {
     unsigned char *p = (unsigned char *) str;
@@ -16,72 +17,29 @@ char *strlwr(char *str) {
     return str;
 }
 
-void test(char *string, List *list) {
-
+void test(char *string) {
     char *newLine;
     char *endTest;
-    size_t nbLine = 0;
+    size_t nbLine = 1;
     newLine = strsep(&string, "\n");
-    while (newLine != NULL) {
-        if (newLine[0] != '\0') {
-            ++nbLine;
+    while (newLine != NULL){
+        if (newLine[0] != '\0'){
             endTest = newLine;
-            char *test;
+            char * test;
             test = strsep(&endTest, " ,?.;[]!-");
-            while (test != NULL) {
+            while (test != NULL){
                 if (test[0] != '\0') {
-                    if (strlen(test) >= 3) {
-                        Heading *heading = createHeading(strlwr(test));
-                        Heading *ptr = getElement(list, heading);
-                        if (ptr) {
-                            addPage(ptr, nbLine);
-                            free(heading);
-                        } else {
-                            addPage(heading, nbLine);
-                            pushHeadingBack(list, heading);
-                        }
-                    }
-                    //printf("%s\n", strlwr(test));
+                    printf("%s\n", strlwr(test));
                 }
                 test = strsep(&endTest, " ,?.;[]!-");
             }
         }
         newLine = strsep(&string, "\n");
     }
-
-
 }
 
-int main() {
-    /*
-    List* list = createEmptyList(HEADING);
-    setHeadingCleanup(list, destroyHeading);
-    setComparaison(list,compareHeading);
-    Heading* heading = createHeading("Alexandra");
-    Heading* heading1 = createHeading("Test");
-    addPage(heading, 1);
-    addPage(heading, 2);
-    addPage(heading1, 3);
-    addPage(heading1, 4);
-    displayHeading(heading);
-    displayHeading(heading1);
-    pushHeadingBack(list, heading);
-    pushHeadingBack(list, heading1);
 
-    Heading* e = createHeading("Test");
-    Heading* t = getElement(list, e);
-    if (t){
-        printf("EZZZZZZZZZZZZZZZZZZZZ");
-        displayHeading(t);
-    }
-    e = createHeading("Test1234");
-    t = getElement(list, e);
-    if (t){
-        printf("EZZZZZZZZZZZZZZZZZZZZ");
-        displayHeading(t);
-    }
-    deleteList(list);
-*/
+int main(void){
     char str[] = "1606\n"
                  "\n"
                  "THE TRAGEDY OF MACBETH\n"
@@ -3028,14 +2986,6 @@ int main() {
                  "    Whom we invite to see us crown'd at Scone.\n"
                  "                                               Flourish. Exeunt.\n"
                  "                 -THE END-";
-
-
-    List *list = createEmptyList(HEADING);
-    setDisplay(list, displayHeading);
-    setComparaison(list, compareHeading);
-    setHeadingCleanup(list, destroyHeading);
-    test(str, list);
-    displayList(list);
-    deleteList(list);
-    return 0;
+    char arr[] = "a b c\n\n\n\nd e f\ng h i\nk l m";
+    test(str);
 }
