@@ -23,4 +23,6 @@ int compareHeading(const void* a, const void* b);
 
 void sortHeading(Heading* heading);
 
+int* getPage(Heading* heading, int page);
+
 #endif //LABO_6_INDEXATION_HEADING_H

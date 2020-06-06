@@ -27,14 +27,17 @@ void test(char *string, List *list) {
             ++nbLine;
             endTest = newLine;
             char *test;
-            test = strsep(&endTest, " ,?.;[]!-");
+            test = strsep(&endTest, " ,?.;[]!-:\"()'");
             while (test != NULL) {
                 if (test[0] != '\0') {
                     if (strlen(test) >= 3) {
                         Heading *heading = createHeading(strlwr(test));
                         Heading *ptr = getElement(list, heading);
                         if (ptr) {
-                            addPage(ptr, nbLine);
+                            int* page = getPage(ptr, nbLine);
+                            if (!page){
+                                addPage(ptr, nbLine);
+                            }
                             free(heading);
                         } else {
                             addPage(heading, nbLine);
@@ -43,7 +46,7 @@ void test(char *string, List *list) {
                     }
                     //printf("%s\n", strlwr(test));
                 }
-                test = strsep(&endTest, " ,?.;[]!-");
+                test = strsep(&endTest, " ,?.;[]!-:\"()'");
             }
         }
         newLine = strsep(&string, "\n");
@@ -3041,6 +3044,7 @@ int main() {
     test(str, list);
     sortList(list);
     displayList(list);
+    printf("%zu", listSize(list));
     deleteList(list);
     return 0;
 }

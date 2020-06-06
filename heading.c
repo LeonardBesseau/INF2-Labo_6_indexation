@@ -70,3 +70,12 @@ void sortHeading(Heading* heading){
     sortList(heading->list);
 }
 
+int* getPage(Heading* heading, int page){
+    int* test = getElement(heading->list, &page);
+    if (test){
+        return test;
+    } else{
+        return NULL;
+    }
+}
+
