@@ -21,5 +21,6 @@ char* getHeadingWord(void* heading);
 
 int compareHeading(const void* a, const void* b);
 
+void sortHeading(Heading* heading);
 
 #endif //LABO_6_INDEXATION_HEADING_H

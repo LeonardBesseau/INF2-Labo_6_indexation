@@ -53,16 +53,20 @@ void test(char *string, List *list) {
 }
 
 int main() {
-    /*
+/*
     List* list = createEmptyList(HEADING);
     setHeadingCleanup(list, destroyHeading);
     setComparaison(list,compareHeading);
     Heading* heading = createHeading("Alexandra");
     Heading* heading1 = createHeading("Test");
+    addPage(heading1, 4);
+    addPage(heading1, 3);
+    addPage(heading1, 1);
+    addPage(heading1, 9);
+    addPage(heading1, 200);
+    sortHeading(heading1);
     addPage(heading, 1);
     addPage(heading, 2);
-    addPage(heading1, 3);
-    addPage(heading1, 4);
     displayHeading(heading);
     displayHeading(heading1);
     pushHeadingBack(list, heading);
@@ -80,8 +84,8 @@ int main() {
         printf("EZZZZZZZZZZZZZZZZZZZZ");
         displayHeading(t);
     }
-    deleteList(list);
-*/
+    deleteList(list);*/
+
     char str[] = "1606\n"
                  "\n"
                  "THE TRAGEDY OF MACBETH\n"
@@ -3035,6 +3039,7 @@ int main() {
     setComparaison(list, compareHeading);
     setHeadingCleanup(list, destroyHeading);
     test(str, list);
+    sortList(list);
     displayList(list);
     deleteList(list);
     return 0;

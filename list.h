@@ -61,13 +61,13 @@ void displayList(List *l);
 
 void* findHeading(const List* l, char* word);
 
-void sortList(List* l);
-
 int compareInt(const void* a, const void* b);
 
 void displayInt(const void* a);
 
 void* getElement(List* l, const void*a);
+
+void sortList(List* l);
 
 
 

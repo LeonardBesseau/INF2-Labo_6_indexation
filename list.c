@@ -2,6 +2,13 @@
 #include <stdio.h>
 #include <string.h>
 
+#define swap(x, y) do \
+   { unsigned char swap_temp[sizeof(x) == sizeof(y) ? (signed)sizeof(x) : -1]; \
+     memcpy(swap_temp,&y,sizeof(x)); \
+     memcpy(&y,&x,       sizeof(x)); \
+     memcpy(&x,swap_temp,sizeof(x)); \
+    } while(0)
+
 
 typedef struct LinkedNode Node;
 
@@ -44,6 +51,8 @@ Node *endNode(const List *l);
 bool insertValueNode(Node *m, int value);
 
 bool insertHeadingNode(Node *m, void *heading);
+
+void swapNode(Node *a, Node *b);
 
 Node *createHeadingNode(Node *next, Node *prev, void *heading) {
     Node *output = (Node *) malloc(sizeof(Node));
@@ -119,6 +128,24 @@ bool insertHeadingNode(Node *m, void *heading) {
         return false;
     }
 }
+
+void swapNode(Node *a, Node *b) {
+    if (a == b) {
+        return;
+    }
+    Node *m1p = a->prev;
+    Node *m1s = a->next;
+    Node *m2p = b->prev;
+    Node *m2s = b->next;
+
+    swap(m1p->next, m2p->next);
+    swap(a->next, b->next);
+    swap(m1s->prev, m2s->prev);
+    swap(a->prev, b->prev);
+
+
+}
+
 
 List *createEmptyList(Type type) {
     List *out = (List *) malloc(sizeof(List));
@@ -261,7 +288,7 @@ void setDisplay(List *l, void (*display)(const void *)) {
     l->display = display;
 }
 
-void setComparaison(List* l, int(*cmp) (const void* a, const void* b)){
+void setComparaison(List *l, int(*cmp)(const void *a, const void *b)) {
     l->cmp = cmp;
 }
 
@@ -308,5 +335,39 @@ void *getElement(List *l, const void *a) {
         }
     }
     return NULL;
+}
+
+void sortList(List *l) {
+    Node *j = beginNode(l);
+    const Node *end = endNode(l);
+    if (l->type == VALUE) {
+        while (j != end) {
+            Node *iMin = j;
+            Node *i = iMin->next;
+            while (i != end) {
+
+                if (l->cmp(&i->data.value, &iMin->data.value) < 0) {
+                    iMin = i;
+                }
+                i = i->next;
+            }
+            swapNode(iMin, j);
+            j = iMin->next;
+        }
+    } else {
+        while (j != end) {
+            Node *iMin = j;
+            Node *i = iMin->next;
+            while (i != end) {
+                if (l->cmp(i->data.heading, iMin->data.heading) < 0) {
+                    iMin = i;
+                }
+                i = i->next;
+            }
+            swapNode(iMin, j);
+            j = iMin->next;
+        }
+    }
+
 }
 

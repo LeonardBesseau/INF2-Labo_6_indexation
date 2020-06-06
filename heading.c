@@ -66,3 +66,7 @@ int compareHeading(const void* a, const void* b){
     return strcmp(A->word, B->word);
 }
 
+void sortHeading(Heading* heading){
+    sortList(heading->list);
+}
+
