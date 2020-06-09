@@ -19,31 +19,19 @@ Compilateur : gcc version 7.4.0
 
 typedef struct LinkedList List;
 
-typedef enum {
-    VALUE, HEADING
-} Type;
+void *front(const List *l);
 
-int frontValue(const List *l);
+void *back(const List *l);
 
-int backValue(const List *l);
-
-void *frontHeading(const List *l);
-
-void *backHeading(const List *l);
-
-List *createEmptyList(Type type);
+List *createEmptyList();
 
 bool isListEmpty(const List *l);
 
 size_t listSize(const List *l);
 
-bool pushValueFront(List *l, int value);
+bool pushFront(List *l, void *data);
 
-bool pushHeadingFront(List *l, void *heading);
-
-bool pushValueBack(List *l, int value);
-
-bool pushHeadingBack(List *l, void *heading);
+bool pushBack(List *l, void *data);
 
 void pop_front(List *l);
 
@@ -51,23 +39,19 @@ void pop_back(List *l);
 
 void deleteList(List* l);
 
-void setHeadingCleanup(List *l, void (*destroy) (void*));
+void setCleanup(List *l, void (*destroy) (void*));
 
 void setDisplay(List* l, void (*display) (const void*));
 
-void setComparaison(List* l, int(*cmp) (const void* a, const void* b));
+void setCompare(List* l, int(*cmp) (const void* a, const void* b));
 
 void displayList(List *l);
-
-void* findHeading(const List* l, char* word);
-
-int compareInt(const void* a, const void* b);
-
-void displayInt(const void* a);
 
 void* getElement(List* l, const void*a);
 
 void sortList(List* l);
+
+
 
 
 

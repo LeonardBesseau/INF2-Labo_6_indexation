@@ -16,79 +16,61 @@ char *strlwr(char *str) {
     return str;
 }
 
-void test(char *string, List *list) {
-
-    char *newLine;
-    char *endTest;
-    size_t nbLine = 0;
-    newLine = strsep(&string, "\n");
-    while (newLine != NULL) {
-        if (newLine[0] != '\0') {
-            ++nbLine;
-            endTest = newLine;
-            char *test;
-            test = strsep(&endTest, " ,?.;[]!-:\"()'<");
-            while (test != NULL) {
-                if (test[0] != '\0') {
-                    if (strlen(test) >= 3) {
-                        Heading *heading = createHeading(strlwr(test));
+void test3(char*string, List* list){
+    char *p = string;
+    char *word = string;
+    size_t line = 1;
+    while (*p != '\0') {
+        switch (*p) {
+            case ' ':
+                *p = '\0';
+                if (strlen(word) >= 3) {
+                    Heading *heading = createHeading(strlwr(word));
+                    if(heading){
                         Heading *ptr = getElement(list, heading);
-                        if (ptr) {
-                            int* page = getPage(ptr, nbLine);
+                       if (ptr) {
+                            int* page = getPage(ptr, line);
                             if (!page){
-                                addPage(ptr, nbLine);
+                                addPage(ptr, line);
                             }
-                            free(heading);
+                            destroyHeading(heading);
                         } else {
-                            addPage(heading, nbLine);
-                            pushHeadingBack(list, heading);
+                            addPage(heading, line);
+                            pushBack(list, heading);
                         }
                     }
-                    //printf("%s\n", strlwr(test));
                 }
-                test = strsep(&endTest, " ,?.;[]!-:\"()'<");
-            }
+                word = ++p;
+                break;
+            case '.':
+            case '[':
+            case ']':
+            case '<':
+            case '(':
+            case ')':
+            case ',':
+            case '?':
+            case '-':
+            case '!':
+            case ';':
+            case ':':
+            case '\'':
+            case '\"':
+                *p = ' ';
+                break;
+            case '\n':
+                *p = ' ';
+                ++line;
+                break;
+            default:
+                ++p;
         }
-        newLine = strsep(&string, "\n");
     }
-
-
 }
 
+
 int main() {
-/*
-    List* list = createEmptyList(HEADING);
-    setHeadingCleanup(list, destroyHeading);
-    setComparaison(list,compareHeading);
-    Heading* heading = createHeading("Alexandra");
-    Heading* heading1 = createHeading("Test");
-    addPage(heading1, 4);
-    addPage(heading1, 3);
-    addPage(heading1, 1);
-    addPage(heading1, 9);
-    addPage(heading1, 200);
-    sortHeading(heading1);
-    addPage(heading, 1);
-    addPage(heading, 2);
-    displayHeading(heading);
-    displayHeading(heading1);
-    pushHeadingBack(list, heading);
-    pushHeadingBack(list, heading1);
-
-    Heading* e = createHeading("Test");
-    Heading* t = getElement(list, e);
-    if (t){
-        printf("EZZZZZZZZZZZZZZZZZZZZ");
-        displayHeading(t);
-    }
-    e = createHeading("Test1234");
-    t = getElement(list, e);
-    if (t){
-        printf("EZZZZZZZZZZZZZZZZZZZZ");
-        displayHeading(t);
-    }
-    deleteList(list);*/
-
+//*
     char str[] = "1606\n"
                  "\n"
                  "THE TRAGEDY OF MACBETH\n"
@@ -3034,17 +3016,18 @@ int main() {
                  "    So thanks to all at once and to each one,\n"
                  "    Whom we invite to see us crown'd at Scone.\n"
                  "                                               Flourish. Exeunt.\n"
-                 "                 -THE END-";
+                 "                 -THE END-\n";
 
 
-    List *list = createEmptyList(HEADING);
+    List *list = createEmptyList();
     setDisplay(list, displayHeading);
-    setComparaison(list, compareHeading);
-    setHeadingCleanup(list, destroyHeading);
-    test(str, list);
+    setCompare(list, compareHeading);
+    setCleanup(list, destroyHeading);
+    test3(str, list);
     sortList(list);
     displayList(list);
     printf("%zu", listSize(list));
     deleteList(list);
+    //*/
     return 0;
 }

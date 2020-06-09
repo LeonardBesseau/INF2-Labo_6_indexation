@@ -20,16 +20,26 @@ struct BookHeading {
     List* list;
 };
 
+
+void destroyInt(void* data);
+
+int compareInt(const void* a, const void* b);
+
+void displayInt(const void* a);
+
 Heading *createHeading(char* word){
     Heading *output = (Heading *) malloc(sizeof(Heading));
     if (output) {
         output->word = word;
-        output->list = createEmptyList(VALUE);
-
+        output->list = createEmptyList();
         if (output->list){
+            setCleanup(output->list, destroyInt);
             setDisplay(output->list, displayInt);
-            setComparaison(output->list, compareInt);
+            setCompare(output->list, compareInt);
             return output;
+        } else{
+            free(output);
+            return NULL;
         }
     } else {
         return NULL;
@@ -38,13 +48,16 @@ Heading *createHeading(char* word){
 
 void destroyHeading(void* heading){
     if (heading){
-        deleteList(((Heading*)  (heading))->list);
+        deleteList(((Heading*) heading)->list);
         free(heading);
+        heading = NULL;
     }
 }
 
 bool addPage(Heading* heading, int page){
-    return pushValueBack(heading->list,page);
+    int* tmp = (int*) malloc(sizeof(int));
+    *tmp = page;
+    return pushBack(heading->list,tmp);
 }
 
 size_t getNumberOfPage(Heading* heading){
@@ -62,7 +75,7 @@ char* getHeadingWord(void* heading){
 }
 
 int compareHeading(const void* a, const void* b){
-    const Heading *A = a, *B = b;
+    const Heading *A = (Heading*) a, *B = (Heading *)b;
     return strcmp(A->word, B->word);
 }
 
@@ -76,6 +89,27 @@ int* getPage(Heading* heading, int page){
         return test;
     } else{
         return NULL;
+    }
+}
+
+void setHeadingWord(void* heading, char* word){
+    ((Heading*) heading)->word = word;
+}
+
+int compareInt(const void *a, const void *b) {
+    const int *A = a, *B = b;
+    return (*A > *B) - (*A < *B);
+}
+
+void displayInt(const void *a) {
+    const int *A = a;
+    printf("%d, ", *A);
+}
+
+void destroyInt(void* data){
+    if (data){
+        free(data);
+        data = NULL;
     }
 }
 

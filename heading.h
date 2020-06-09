@@ -4,8 +4,8 @@
 
 #ifndef LABO_6_INDEXATION_HEADING_H
 #define LABO_6_INDEXATION_HEADING_H
-#include "heading_decl.h"
 #include "list.h"
+typedef struct BookHeading Heading;
 
 Heading *createHeading(char* word);
 
@@ -18,6 +18,8 @@ size_t getNumberOfPage(Heading* heading);
 void displayHeading(const void* heading);
 
 char* getHeadingWord(void* heading);
+
+void setHeadingWord(void* heading, char* word);
 
 int compareHeading(const void* a, const void* b);
 

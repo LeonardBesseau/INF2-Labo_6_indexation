@@ -40,27 +40,30 @@ void test(char *string) {
 }
 
 void test2(char *string) {
-    char* start = string;
-    char *newLine;
-    char *endTest;
-    char *memory = NULL;
-    static size_t nbLines = 0;
-
-    newLine = strtok(string, "\n");
-    while (newLine != NULL) {
-        size_t size = newLine-start;
-        nbLines += 1 + size;
-        endTest = strtok(newLine, " ");
-        while (endTest != NULL){
-            memory = endTest;
-            printf("%zu %s\n",nbLines, endTest);
-            endTest = strtok(NULL, " ");
+    char *p = string;
+    char *word = string;
+    size_t line = 1;
+    while (*p != '\0') {
+        switch (*p) {
+            case ' ':
+                *p = '\0';
+                printf("%zu %s\n",line, word);
+                word = ++p;
+                break;
+            case '.':
+            case ',':
+            case '?':
+            case '-':
+            case '\"':
+                *p = ' ';
+                break;
+            case '\n':
+                *p = ' ';
+                ++line;
+                break;
+            default:
+                ++p;
         }
-        printf("\n");
-        endTest = memory+strlen(memory)+1;
-
-        start = endTest;
-        newLine = strtok(endTest, "\n");
     }
 }
 
@@ -3016,8 +3019,8 @@ int main(void) {
                  "\n"
                  "\n"
                  "phrase de test\n"
-                 "assez basique et assez sympa\n"
-                 "pas comme le cours\n";
-    read(test2);
-    //test2(arr);
+                 "assez basique et assez sympa.\n"
+                 "pas comme le cours. On verra comment ça se passe\n";
+    //read(test2);
+    test2(str);
 }
