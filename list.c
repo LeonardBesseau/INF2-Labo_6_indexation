@@ -317,6 +317,7 @@ void displayInt(const void *a) {
 }
 
 void *getElement(List *l, const void *a) {
+    //TODO Modify test value by passing data directly
     if (l->type == VALUE) {
         Node *cur = beginNode(l);
         while (cur != endNode(l)) {

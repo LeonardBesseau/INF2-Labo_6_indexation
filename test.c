@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include "read_file.h"
 
 char *strlwr(char *str) {
     unsigned char *p = (unsigned char *) str;
@@ -22,12 +23,12 @@ void test(char *string) {
     char *endTest;
     size_t nbLine = 1;
     newLine = strsep(&string, "\n");
-    while (newLine != NULL){
-        if (newLine[0] != '\0'){
+    while (newLine != NULL) {
+        if (newLine[0] != '\0') {
             endTest = newLine;
-            char * test;
+            char *test;
             test = strsep(&endTest, " ,?.;[]!-");
-            while (test != NULL){
+            while (test != NULL) {
                 if (test[0] != '\0') {
                     printf("%s\n", strlwr(test));
                 }
@@ -38,8 +39,32 @@ void test(char *string) {
     }
 }
 
+void test2(char *string) {
+    char* start = string;
+    char *newLine;
+    char *endTest;
+    char *memory = NULL;
+    static size_t nbLines = 0;
 
-int main(void){
+    newLine = strtok(string, "\n");
+    while (newLine != NULL) {
+        size_t size = newLine-start;
+        nbLines += 1 + size;
+        endTest = strtok(newLine, " ");
+        while (endTest != NULL){
+            memory = endTest;
+            printf("%zu %s\n",nbLines, endTest);
+            endTest = strtok(NULL, " ");
+        }
+        printf("\n");
+        endTest = memory+strlen(memory)+1;
+
+        start = endTest;
+        newLine = strtok(endTest, "\n");
+    }
+}
+
+int main(void) {
     char str[] = "1606\n"
                  "\n"
                  "THE TRAGEDY OF MACBETH\n"
@@ -2986,6 +3011,13 @@ int main(void){
                  "    Whom we invite to see us crown'd at Scone.\n"
                  "                                               Flourish. Exeunt.\n"
                  "                 -THE END-";
-    char arr[] = "a b c\n\n\n\nd e f\ng h i\nk l m";
-    test(str);
+    char arr[] = "Ceci est une\n"
+                 "\n"
+                 "\n"
+                 "\n"
+                 "phrase de test\n"
+                 "assez basique et assez sympa\n"
+                 "pas comme le cours\n";
+    read(test2);
+    //test2(arr);
 }

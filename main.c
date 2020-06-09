@@ -27,7 +27,7 @@ void test(char *string, List *list) {
             ++nbLine;
             endTest = newLine;
             char *test;
-            test = strsep(&endTest, " ,?.;[]!-:\"()'");
+            test = strsep(&endTest, " ,?.;[]!-:\"()'<");
             while (test != NULL) {
                 if (test[0] != '\0') {
                     if (strlen(test) >= 3) {
@@ -46,7 +46,7 @@ void test(char *string, List *list) {
                     }
                     //printf("%s\n", strlwr(test));
                 }
-                test = strsep(&endTest, " ,?.;[]!-:\"()'");
+                test = strsep(&endTest, " ,?.;[]!-:\"()'<");
             }
         }
         newLine = strsep(&string, "\n");
