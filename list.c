@@ -19,7 +19,7 @@ struct LinkedNode {
 };
 
 struct LinkedList {
-    Node *apad;
+    Node *bfbl;
     size_t size;
 
     void (*destroy)(void *);
@@ -64,11 +64,11 @@ void eraseNode(Node *m, void (*destroy)(void *)) {
 }
 
 Node *beginNode(const List *l) {
-    return l->apad->next;
+    return l->bfbl->next;
 }
 
 Node *endNode(const List *l) {
-    return l->apad;
+    return l->bfbl;
 }
 
 bool insertNode(Node *m, void *value) {
@@ -105,18 +105,18 @@ List *createEmptyList() {
     List *out = (List *) malloc(sizeof(List));
     if (out) {
 
-        out->apad = createNode(NULL, NULL, NULL);
+        out->bfbl = createNode(NULL, NULL, NULL);
 
-        if (out->apad) {
+        if (out->bfbl) {
             out->destroy = NULL;
             out->cmp = NULL;
             out->display = NULL;
             out->size = 0;
-            out->apad->next = out->apad;
-            out->apad->prev = out->apad;
+            out->bfbl->next = out->bfbl;
+            out->bfbl->prev = out->bfbl;
             return out;
         }
-        //if apad creation failed release memory
+        //if bfbl creation failed release memory
         free(out);
     }
     return NULL;
@@ -193,11 +193,11 @@ void deleteList(List *l) {
     static int test = 0;
     while (!isListEmpty(l)) {
         ++test;
-        int a = *((int*) l->apad->next->data);
-        eraseNode(l->apad->next, l->destroy);
+        int a = *((int*) l->bfbl->next->data);
+        eraseNode(l->bfbl->next, l->destroy);
     }
 
-    free(l->apad);
+    free(l->bfbl);
     free(l);
 }
 
@@ -215,7 +215,7 @@ void setCompare(List *l, int(*cmp)(const void *a, const void *b)) {
 }
 
 
-void displayList(List *l) {
+void displayList(const List *l) {
     Node *cur = beginNode(l);
     while (cur != endNode(l)) {
         l->display(cur->data);

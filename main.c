@@ -2,71 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "list.h"
 #include "heading.h"
+#include "book_index.h"
 
-char *strlwr(char *str) {
-    unsigned char *p = (unsigned char *) str;
-
-    while (*p) {
-        *p = tolower((unsigned char) *p);
-        p++;
-    }
-
-    return str;
-}
-
-void test3(char*string, List* list){
-    char *p = string;
-    char *word = string;
-    size_t line = 1;
-    while (*p != '\0') {
-        switch (*p) {
-            case ' ':
-                *p = '\0';
-                if (strlen(word) >= 3) {
-                    Heading *heading = createHeading(strlwr(word));
-                    if(heading){
-                        Heading *ptr = getElement(list, heading);
-                       if (ptr) {
-                            int* page = getPage(ptr, line);
-                            if (!page){
-                                addPage(ptr, line);
-                            }
-                            destroyHeading(heading);
-                        } else {
-                            addPage(heading, line);
-                            pushBack(list, heading);
-                        }
-                    }
-                }
-                word = ++p;
-                break;
-            case '.':
-            case '[':
-            case ']':
-            case '<':
-            case '(':
-            case ')':
-            case ',':
-            case '?':
-            case '-':
-            case '!':
-            case ';':
-            case ':':
-            case '\'':
-            case '\"':
-                *p = ' ';
-                break;
-            case '\n':
-                *p = ' ';
-                ++line;
-                break;
-            default:
-                ++p;
-        }
-    }
-}
 
 
 int main() {
@@ -3019,15 +2957,12 @@ int main() {
                  "                 -THE END-\n";
 
 
-    List *list = createEmptyList();
-    setDisplay(list, displayHeading);
-    setCompare(list, compareHeading);
-    setCleanup(list, destroyHeading);
-    test3(str, list);
-    sortList(list);
-    displayList(list);
-    printf("%zu", listSize(list));
-    deleteList(list);
+    Index * index = createIndex();
+    if(analyseLine(index, str)){
+        displayIndex(index);
+    }
+
+    deleteIndex(index);
     //*/
     return 0;
 }

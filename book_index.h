@@ -4,17 +4,21 @@
 
 #ifndef LABO_6_INDEXATION_BOOK_INDEX_H
 #define LABO_6_INDEXATION_BOOK_INDEX_H
+#include <stdbool.h>
 
-#include "list.h"
 
-List* createIndex();
+typedef struct ListIndex Index;
 
-bool analyseLine(List* index, char* line);
+Index * createIndex();
 
-void displayIndex(List* index);
+bool analyseLine(Index* index, char* line);
 
-void saveIndex(List* index);
+void displayIndex(Index* index);
 
-void deleteIndex(List* index);
+bool saveIndex(Index* index);
+
+void deleteIndex(Index* index);
+
+size_t getIndexSize(Index* index);
 
 #endif //LABO_6_INDEXATION_BOOK_INDEX_H
