@@ -92,6 +92,15 @@ int* getPage(Heading* heading, int page){
     }
 }
 
+int* getLastPage(Heading* heading, int page){
+    int* test = back(heading->list);
+    if (test){
+        return test;
+    } else{
+        return NULL;
+    }
+}
+
 void setHeadingWord(void* heading, char* word){
     ((Heading*) heading)->word = word;
 }

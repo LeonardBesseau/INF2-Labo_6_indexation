@@ -38,8 +38,8 @@ bool analyseString(List * index, char* string){
                     if(heading){
                         Heading *ptr = getElement(index, heading);
                         if (ptr) {
-                            int* page = getPage(ptr, line);
-                            if (!page){
+                            int* page = getLastPage(ptr, line);
+                            if (*page != line){
                                 addPage(ptr, line);
                             }
                             destroyHeading(heading);

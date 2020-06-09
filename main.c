@@ -2961,6 +2961,7 @@ int main() {
     if(analyseLine(index, str)){
         displayIndex(index);
     }
+    printf("%zu", getIndexSize(index));
 
     deleteIndex(index);
     //*/

@@ -133,32 +133,20 @@ size_t listSize(const List *l) {
 
 void *front(const List *l) {
     if (!isListEmpty(l)) {
+        Node *n = beginNode(l);
+        return n->data;
+    }
+    return NULL;
+}
+
+void *back(const List *l){
+    if (!isListEmpty(l)) {
         Node *n = endNode(l)->prev;
         return n->data;
     }
     return NULL;
 }
 
-void *back(const List *l);
-
-int frontValue(const List *l) {
-
-    return -1;
-}
-
-int backValue(const List *l) {
-
-    return -1;
-}
-
-void *frontHeading(const List *l) {
-
-    return NULL;
-}
-
-void *backHeading(const List *l) {
-    return NULL;
-}
 
 bool pushFront(List *l, void *data) {
     bool result = insertNode(beginNode(l), data);
