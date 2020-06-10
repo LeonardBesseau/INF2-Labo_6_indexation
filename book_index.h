@@ -6,6 +6,7 @@
 #define LABO_6_INDEXATION_BOOK_INDEX_H
 
 #include <stdbool.h>
+#include <stdio.h>
 
 
 typedef struct ListIndex Index;
@@ -14,9 +15,9 @@ Index *createIndex();
 
 bool analyseLine(Index *index, Index *stopWords, char *text, int* line);
 
-void displayIndex(Index *index);
+void displayIndex(Index *index, FILE* file);
 
-bool saveIndex(Index *index);
+bool saveIndex(Index *index, const char* fileName);
 
 void deleteIndex(Index *index);
 

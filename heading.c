@@ -25,7 +25,7 @@ void destroyInt(void *data);
 
 int compareInt(const void *a, const void *b);
 
-void displayInt(const void *a);
+void displayInt(const void *a, FILE *);
 
 Heading *createHeading(char *word) {
     Heading *output = malloc(sizeof(Heading));
@@ -73,9 +73,9 @@ size_t getNumberOfPage(const Heading *heading) {
     return listSize(heading->location);
 }
 
-void displayHeading(const void *heading) {
-    printf("%s, ", ((Heading *) (heading))->word);
-    displayList(((Heading *) (heading))->location, true);
+void displayHeading(const void *heading, FILE *output) {
+    fprintf(output,"%s, ", ((Heading *) (heading))->word);
+    displayList(((Heading *) (heading))->location, true, output);
 }
 
 const char *getHeadingWord(void *heading) {
@@ -118,9 +118,9 @@ int compareInt(const void *a, const void *b) {
     return (*A > *B) - (*A < *B);
 }
 
-void displayInt(const void *a) {
+void displayInt(const void *a, FILE *output) {
     const int *A = a;
-    printf("%d", *A);
+    fprintf(output,"%d", *A);
 }
 
 void destroyInt(void *data) {

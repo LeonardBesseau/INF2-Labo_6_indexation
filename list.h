@@ -16,6 +16,7 @@ Compilateur : gcc version 7.4.0
 
 #include <stdbool.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 typedef struct LinkedList List;
 /**
@@ -131,8 +132,9 @@ bool insertInOrder(List *l, void *data, void** out);
  * Display the list on the standard output
  * @param l a pointer to the list
  * @param separator a boolean, set to true to enable separator
+ * @param output a pointer to the output
  */
-void displayList(const List *l, bool separator);
+void displayList(const List *l, bool separator, FILE* output);
 
 /**
  * Sort the list
@@ -158,7 +160,7 @@ void setCleanup(List *l, void (*destroy)(void *));
  * @param l a pointer to the list
  * @param display a pointer to a function that display the data
  */
-void setDisplay(List *l, void (*display)(const void *));
+void setDisplay(List *l, void (*display)(const void *, FILE*));
 
 /**
  * Set the comparison function

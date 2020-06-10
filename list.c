@@ -1,6 +1,5 @@
 #include "list.h"
 #include <string.h>
-#include <stdio.h>
 
 /**
  * Swap memory of element
@@ -41,7 +40,7 @@ struct LinkedList {
 
     int (*cmp)(const void *, const void *);
 
-    void (*display)(const void *);
+    void (*display)(const void *, FILE*);
 };
 
 Node *createNode(Node *next, Node *prev, void *data) {
@@ -212,19 +211,19 @@ bool insertInOrder(List *l, void *data, void **out) {
     return pushBack(l, data);
 }
 
-void displayList(const List *l, bool separator) {
+void displayList(const List *l, bool separator, FILE* output) {
     Node *cur = beginNode(l);
     Node* end = endNode(l);
     bool loop = cur != end;
     while (loop) {
-        l->display(cur->data);
+        l->display(cur->data, output);
         cur = cur->next;
         loop = cur != end;
         if (separator && loop){
-            printf(", ");
+            fprintf(output,", ");
         }
     }
-    printf("\n");
+    fprintf(output,"\n");
 }
 
 void sortList(List *l) {
@@ -253,7 +252,7 @@ void setCleanup(List *l, void (*destroy)(void *)) {
 }
 
 
-void setDisplay(List *l, void (*display)(const void *)) {
+void setDisplay(List *l, void (*display)(const void *, FILE*)) {
     l->display = display;
 }
 

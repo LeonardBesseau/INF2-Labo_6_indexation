@@ -4,25 +4,27 @@
 
 #ifndef LABO_6_INDEXATION_HEADING_H
 #define LABO_6_INDEXATION_HEADING_H
+
 #include "list.h"
+
 typedef struct BookHeading Heading;
 
 /**
  * @category Constructor Destructor
  */
 
- /**
-  * Create a heading
-  * @param word a pointer to the word of the heading
-  * @return a pointer to the heading. Returns NULL if memory could not be allocated
-  */
-Heading *createHeading(char* word);
+/**
+ * Create a heading
+ * @param word a pointer to the word of the heading
+ * @return a pointer to the heading. Returns NULL if memory could not be allocated
+ */
+Heading *createHeading(char *word);
 
 /**
  * Delete heading and free memory
  * @param heading a pointer to the heading
  */
-void deleteHeading(void* heading);
+void deleteHeading(void *heading);
 
 /**
  * @category Capacity
@@ -33,7 +35,7 @@ void deleteHeading(void* heading);
  * @param heading a pointer to the heading
  * @return a size_t the number of pages
  */
-size_t getNumberOfPage(const Heading* heading);
+size_t getNumberOfPage(const Heading *heading);
 
 
 /**
@@ -46,21 +48,21 @@ size_t getNumberOfPage(const Heading* heading);
  * @param page an integer, the page number to get
  * @return a pointer to the page value if it exist. A NULL pointer otherwise.
  */
-int* getPage(Heading* heading, int page);
+int *getPage(Heading *heading, int page);
 
 /**
  * Get the value of the last page
  * @param heading a pointer to the heading
  * @return an integer, the value of the last page. 0 if page list is empty.
  */
-int getLastPage(Heading* heading);
+int getLastPage(Heading *heading);
 
 /**
  * Get the word of the heading
  * @param heading a pointer to the heading
  * @return a const char pointer to the word.
  */
-const char* getHeadingWord(void* heading);
+const char *getHeadingWord(void *heading);
 
 /**
  * @category Modifier
@@ -72,7 +74,7 @@ const char* getHeadingWord(void* heading);
  * @param page an integer, the page to add
  * @return true if the insertion has been effectuated. False otherwise.
  */
-bool addPage(Heading* heading, int page);
+bool addPage(Heading *heading, int page);
 
 /**
  * add an entry to the heading location at the correct position
@@ -80,14 +82,14 @@ bool addPage(Heading* heading, int page);
  * @param page an integer, the page to add
  * @return true if the insertion has been effectuated. False otherwise.
  */
-bool insertPageInPlace(Heading* heading, int page);
+bool insertPageInPlace(Heading *heading, int page);
 
 /**
  * Modify the word of the heading
  * @param heading a pointer to the heading
  * @param word a const char pointer to the new word
  */
-void setHeadingWord(void* heading,char* word);
+void setHeadingWord(void *heading, char *word);
 
 /**
  * @category Operation
@@ -96,8 +98,9 @@ void setHeadingWord(void* heading,char* word);
 /**
  * Display the heading on the standard output
  * @param heading a pointer to the heading
+ * @param output a pointer to the output
  */
-void displayHeading(const void* heading);
+void displayHeading(const void *heading, FILE *output);
 
 /**
  * @category Util functions
@@ -113,15 +116,14 @@ void displayHeading(const void* heading);
  * 0    : the contents of both words are equal
  * >0   : the first character that does not match has a greater value in a than in b
  */
-int compareHeading(const void* a, const void* b);
+int compareHeading(const void *a, const void *b);
 
 /**
  * Sort the location list
  * @param heading a pointer to a heading
  * @details sorted with a selection sort O(n²)
  */
-void sortHeading(Heading* heading);
-
+void sortHeading(Heading *heading);
 
 
 #endif //LABO_6_INDEXATION_HEADING_H

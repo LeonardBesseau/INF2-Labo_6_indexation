@@ -11,11 +11,27 @@
 #define EXIT_ERROR_ANALYSE 5
 #define CHUNK 256
 
-int read(const char* fileName, bool (*f)(Index *index, Index *stopWords, char *word, int* line), Index* index, Index* stopWords) {
-    const char *FILE_NAME = fileName;
+int checkFileExist(const char *fileName);
+
+int read(const char *fileName, bool (*f)(Index *index, Index *stopWords, char *word, int *line), Index *index,
+         Index *stopWords);
+
+int checkFileExist(const char *fileName) {
     FILE *file;
 
-    file = fopen(FILE_NAME, "r");
+    file = fopen(fileName, "r");
+    if (file) {
+        return EXIT_SUCCESS;
+    } else {
+        return EXIT_FAILURE;
+    }
+}
+
+int read(const char *fileName, bool (*f)(Index *index, Index *stopWords, char *word, int *line), Index *index,
+         Index *stopWords) {
+    FILE *file;
+
+    file = fopen(fileName, "r");
     if (file) {
         char *buf = malloc(CHUNK);
 
@@ -24,11 +40,11 @@ int read(const char* fileName, bool (*f)(Index *index, Index *stopWords, char *w
         }
         int line = 0;
         while (fgets(buf, CHUNK, file)) {
-            if(buf[0] == '\n'){
+            if (buf[0] == '\n') {
                 ++line;
                 continue;
             }
-            if(!f(index, stopWords, buf, &line)){
+            if (!f(index, stopWords, buf, &line)) {
                 free(buf);
                 return EXIT_ERROR_ANALYSE;
             }
@@ -50,17 +66,57 @@ int read(const char* fileName, bool (*f)(Index *index, Index *stopWords, char *w
     return EXIT_SUCCESS;
 }
 
-int main() {
-//*
+
+int main(int argc, char *argv[]) {
+    if (argc < 2 || argc > 4) {
+        fprintf(stderr, "Argument count invalid");
+        return EXIT_FAILURE;
+    }
+    if (argc == 2) {
+        if (argv[1][0] == '-') {
+            printf("No help for you");
+            return EXIT_SUCCESS;
+        } else{
+            fprintf(stderr, "Wrong argument");
+            return EXIT_FAILURE;
+        }
+    }
+    if (checkFileExist(argv[1])) {
+        fprintf(stderr, "Input file doesn't exist");
+        return EXIT_FAILURE;
+    }
+    if (!checkFileExist(argv[2])) {
+        char ch = ' ';
+        do {
+            printf("File index.txt already exist.\n Do you want to overwrite it ? y/n");
+            ch = getchar();
+        } while (ch != 'y' && ch != 'n');
+        if (ch == 'n') {
+            return EXIT_FAILURE;
+        }
+    }
 
 
-    Index * index = createIndex();
-    Index * stopWords = createIndex();
-    read("/home/leonard/Downloads/stopwords.txt",analyseLine, stopWords, NULL);
-    read("/home/leonard/Downloads/macbeth.txt",analyseLine, index, stopWords);
-    displayIndex(index);
+    Index *stopWords = createIndex();
+    if (argc == 4){
+        if (checkFileExist(argv[3])) {
+            fprintf(stderr, "Stopwords file doesn't exist");
+            deleteIndex(stopWords);
+            return EXIT_FAILURE;
+        }
+        read(argv[3], analyseLine, stopWords, NULL);
+    }
+
+    // "/home/leonard/Downloads/macbeth.txt" "/home/leonard/Downloads/stopwords.txt"
+    //
+    Index *index = createIndex();
+
+
+    read(argv[1], analyseLine, index, stopWords);
+    displayIndex(index, stdout);
 
     printf("%zu", getIndexSize(index));
+    saveIndex(index,argv[2]);
 
     deleteIndex(index);
     deleteIndex(stopWords);

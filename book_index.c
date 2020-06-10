@@ -1,6 +1,5 @@
 #include <ctype.h>
 #include <string.h>
-
 #include "book_index.h"
 #include "heading.h"
 #include "list.h"
@@ -107,13 +106,25 @@ bool analyseLine(Index *index, Index *stopWords, char *word, int* line) {
 
 }
 
-void displayIndex(Index *index) {
-    sortList(index->list);
-    displayList(index->list, false);
+void displayIndex(Index *index, FILE* file) {
+    displayList(index->list, false, file);
 }
 
-bool saveIndex(Index *index) {
-    return false;
+bool saveIndex(Index *index, const char* fileName) {
+    FILE *file;
+
+    file = fopen(fileName, "w");
+    if (file) {
+        displayList(index->list, false, file);
+        if (ferror(file)) {
+            fprintf(stderr, "Error writing to file");
+            return false;
+        }
+    } else{
+        return false;
+    }
+    fclose(file);
+
 }
 
 void deleteIndex(Index *index) {
