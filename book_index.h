@@ -42,7 +42,7 @@ size_t getIndexSize(Index *index);
 /**
  * Analyse a text and extracts its word into the index
  * @param index a pointer to the index in which the words are added
- * @param stopWords a pointer to an index in which forbidden words are stored
+ * @param stopWords a pointer to an index in which forbidden words are stored (Can be null or empty if need be)
  * @param text the text to analyse. Can be composed of multiple lines
  * @param line a pointer to an integer. The starting line of the text
  * @return true if the operation succeed. false otherwise.

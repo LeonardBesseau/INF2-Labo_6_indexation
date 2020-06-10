@@ -133,7 +133,7 @@ bool saveIndex(Index *index, const char* fileName) {
         return false;
     }
     fclose(file);
-
+    return true;
 }
 
 void deleteIndex(Index *index) {
