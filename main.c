@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
-#include "heading.h"
 #include "book_index.h"
 
 #define EXIT_ALLOCATION_FAILURE 2
@@ -40,8 +38,8 @@ int read(const char *fileName, bool (*f)(Index *index, Index *stopWords, char *w
         }
         int line = 0;
         while (fgets(buf, CHUNK, file)) {
+            ++line;
             if (buf[0] == '\n') {
-                ++line;
                 continue;
             }
             if (!f(index, stopWords, buf, &line)) {
@@ -60,7 +58,7 @@ int read(const char *fileName, bool (*f)(Index *index, Index *stopWords, char *w
         }
         fclose(file);
     } else {
-        printf("Sorry, file doesn't exist.");
+        fprintf(stderr, "Sorry, file doesn't exist.");
         return EXIT_FILE_MISSING;
     }
     return EXIT_SUCCESS;
@@ -98,7 +96,6 @@ int main(int argc, char *argv[]) {
         }
     }
 
-
     Index *stopWords = createIndex();
     if (argc == 4){
         if (checkFileExist(argv[3])) {
@@ -106,6 +103,7 @@ int main(int argc, char *argv[]) {
             deleteIndex(stopWords);
             return EXIT_FAILURE;
         }
+        //TODO check error
         read(argv[3], analyseText, stopWords, NULL);
     }
 
@@ -120,6 +118,5 @@ int main(int argc, char *argv[]) {
 
     deleteIndex(index);
     deleteIndex(stopWords);
-    //*/
-    return 0;
+    return EXIT_SUCCESS;
 }

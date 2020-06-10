@@ -97,17 +97,13 @@ void swapNode(Node *a, Node *b) {
     swap(a->next, b->next);
     swap(m1s->prev, m2s->prev);
     swap(a->prev, b->prev);
-
-
 }
 
 
 List *createEmptyList() {
     List *out = malloc(sizeof(List));
     if (out) {
-
         out->bfbl = createNode(NULL, NULL, NULL);
-
         if (out->bfbl) {
             out->destroy = NULL;
             out->cmp = NULL;
@@ -163,7 +159,6 @@ void *getElement(List *l, const void *a) {
         }
         cur = cur->next;
     }
-
     return NULL;
 }
 

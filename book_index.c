@@ -18,9 +18,9 @@ char *strlwr(char *str) {
         *p = tolower((unsigned char) *p);
         p++;
     }
-
     return str;
 }
+
 
 bool analyseString(List *index, List *stopWords, char *string, int* line);
 
@@ -86,7 +86,6 @@ bool analyseString(List *index, List *stopWords, char *string, int* line) {
                 break;
             case '\n':
                 *p = ' ';
-                (*line)++;
                 break;
             default:
                 ++p;
