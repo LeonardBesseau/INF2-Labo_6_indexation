@@ -16,7 +16,7 @@ typedef struct BookHeading Heading;
   * @param word a pointer to the word of the heading
   * @return a pointer to the heading. Returns NULL if memory could not be allocated
   */
-Heading *createHeading(const char* word);
+Heading *createHeading(char* word);
 
 /**
  * Delete heading and free memory
@@ -87,7 +87,7 @@ bool insertPageInPlace(Heading* heading, int page);
  * @param heading a pointer to the heading
  * @param word a const char pointer to the new word
  */
-void setHeadingWord(void* heading,const char* word);
+void setHeadingWord(void* heading,char* word);
 
 /**
  * @category Operation

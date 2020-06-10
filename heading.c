@@ -16,98 +16,101 @@ Compilateur : gcc version 7.4.0
 #include <string.h>
 
 struct BookHeading {
-    const char*  word;
-    List* location;
+    char *word;
+    List *location;
 };
 
 
-void destroyInt(void* data);
+void destroyInt(void *data);
 
-int compareInt(const void* a, const void* b);
+int compareInt(const void *a, const void *b);
 
-void displayInt(const void* a);
+void displayInt(const void *a);
 
-Heading *createHeading(const char* word){
+Heading *createHeading(char *word) {
     Heading *output = malloc(sizeof(Heading));
     if (output) {
-        output->word = word;
-        output->location = createEmptyList();
-        if (output->location){
-            setCleanup(output->location, destroyInt);
-            setDisplay(output->location, displayInt);
-            setCompare(output->location, compareInt);
-            return output;
-        } else{
-            free(output);
-            return NULL;
+        size_t size = strlen(word) + 1;
+        output->word = malloc(size);
+        if (output->word) {
+            memcpy(output->word, word, size);
+            output->location = createEmptyList();
+            if (output->location) {
+                setCleanup(output->location, destroyInt);
+                setDisplay(output->location, displayInt);
+                setCompare(output->location, compareInt);
+                return output;
+            }
+            free(output->word);
         }
-    } else {
-        return NULL;
+        free(output);
     }
+    return NULL;
 }
 
-void deleteHeading(void* heading){
-    if (heading){
-        deleteList(((Heading*) heading)->location);
+void deleteHeading(void *heading) {
+    if (heading) {
+        deleteList(((Heading *) heading)->location);
+        free(((Heading *) heading)->word);
         free(heading);
         heading = NULL;
     }
 }
 
-bool addPage(Heading* heading, int page){
-    int* tmp = malloc(sizeof(int));
+bool addPage(Heading *heading, int page) {
+    int *tmp = malloc(sizeof(int));
     *tmp = page;
     return pushBack(heading->location, tmp);
 }
 
-bool insertPageInPlace(Heading* heading, int page){
-    int* tmp = malloc(sizeof(int));
+bool insertPageInPlace(Heading *heading, int page) {
+    int *tmp = malloc(sizeof(int));
     *tmp = page;
     return insertInOrder(heading->location, tmp, NULL);
 }
 
-size_t getNumberOfPage(const Heading* heading){
+size_t getNumberOfPage(const Heading *heading) {
     return listSize(heading->location);
 }
 
-void displayHeading(const void* heading){
-    printf("%s, ", ((Heading*)  (heading))->word);
-    displayList(((Heading*)  (heading))->location, true);
+void displayHeading(const void *heading) {
+    printf("%s, ", ((Heading *) (heading))->word);
+    displayList(((Heading *) (heading))->location, true);
 }
 
-const char* getHeadingWord(void* heading){
-    return ((Heading*)  (heading))->word;
+const char *getHeadingWord(void *heading) {
+    return ((Heading *) (heading))->word;
 }
 
-int compareHeading(const void* a, const void* b){
-    const Heading *A = (Heading*) a, *B = (Heading *)b;
+int compareHeading(const void *a, const void *b) {
+    const Heading *A = (Heading *) a, *B = (Heading *) b;
     return strcmp(A->word, B->word);
 }
 
-void sortHeading(Heading* heading){
+void sortHeading(Heading *heading) {
     sortList(heading->location);
 }
 
-int* getPage(Heading* heading, int page){
-    int* test = getElement(heading->location, &page);
-    if (test){
+int *getPage(Heading *heading, int page) {
+    int *test = getElement(heading->location, &page);
+    if (test) {
         return test;
-    } else{
+    } else {
         return NULL;
     }
 }
 
-int getLastPage(Heading* heading){
-    int* test = back(heading->location);
-    if (test){
+int getLastPage(Heading *heading) {
+    int *test = back(heading->location);
+    if (test) {
         return *test;
-    } else{
+    } else {
         return 0;
     }
 }
 
-void setHeadingWord(void* heading,const char* word){
-    ((Heading*) heading)->word = word;
+void setHeadingWord(void *heading, char *word) {
+    ((Heading *) heading)->word = word;
 }
 
 int compareInt(const void *a, const void *b) {
@@ -120,8 +123,8 @@ void displayInt(const void *a) {
     printf("%d", *A);
 }
 
-void destroyInt(void* data){
-    if (data){
+void destroyInt(void *data) {
+    if (data) {
         free(data);
         data = NULL;
     }

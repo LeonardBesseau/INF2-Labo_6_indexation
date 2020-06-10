@@ -6,7 +6,7 @@
 #include "list.h"
 
 struct ListIndex {
-    List* list;
+    List *list;
 };
 
 
@@ -23,12 +23,11 @@ char *strlwr(char *str) {
     return str;
 }
 
-bool analyseString(List * index, char* string);
+bool analyseString(List *index, List *stopWords, char *string, int* line);
 
-bool analyseString(List * index, char* string){
+bool analyseString(List *index, List *stopWords, char *string, int* line) {
     char *p = string;
     char *word = string;
-    size_t line = 1;
     while (*p != '\0') {
         switch (*p) {
             case ' ':
@@ -36,17 +35,26 @@ bool analyseString(List * index, char* string){
                 if (strlen(word) >= 3) {
                     Heading *ptr = NULL;
                     Heading *heading = createHeading(strlwr(word));
-                    if(insertInOrder(index, heading, &ptr)){
-                        if (ptr) {
-                            if (getLastPage(ptr) != line){
-                                addPage(ptr, line);
-                            }
+                    if (heading){
+                        Heading *forbidden = stopWords ? getElement(stopWords, heading) : NULL;
+                        if (forbidden){
                             deleteHeading(heading);
-                        } else {
-                            addPage(heading, line);
+                        }else{
+                            if (insertInOrder(index, heading, &ptr)) {
+                                if (ptr) {
+                                    if (getLastPage(ptr) != *line) {
+                                        addPage(ptr, *line);
+                                    }
+                                    deleteHeading(heading);
+                                } else {
+                                    addPage(heading, *line);
+                                }
+                            } else {
+                                deleteHeading(heading);
+                                return false;
+                            }
                         }
                     }else{
-                        deleteHeading(heading);
                         return false;
                     }
                 }
@@ -58,6 +66,7 @@ bool analyseString(List * index, char* string){
             case '<':
             case '(':
             case ')':
+            case '"':
             case ',':
             case '?':
             case '-':
@@ -65,12 +74,11 @@ bool analyseString(List * index, char* string){
             case ';':
             case ':':
             case '\'':
-            case '\"':
                 *p = ' ';
                 break;
             case '\n':
                 *p = ' ';
-                ++line;
+                (*line)++;
                 break;
             default:
                 ++p;
@@ -80,7 +88,7 @@ bool analyseString(List * index, char* string){
 }
 
 Index *createIndex() {
-    Index* index = malloc(sizeof(Index));
+    Index *index = malloc(sizeof(Index));
     index->list = createEmptyList();
     if (index->list) {
         setDisplay(index->list, displayHeading);
@@ -90,25 +98,30 @@ Index *createIndex() {
     return index;
 }
 
-bool analyseLine(Index *index, char *line){
-    return analyseString(index->list, line);
+bool analyseLine(Index *index, Index *stopWords, char *word, int* line) {
+    if (stopWords){
+        return analyseString(index->list, stopWords->list, word, line);
+    }else{
+        return analyseString(index->list, NULL, word, line);
+    }
+
 }
 
-void displayIndex(Index *index){
+void displayIndex(Index *index) {
     sortList(index->list);
     displayList(index->list, false);
 }
 
-bool saveIndex(Index *index){
+bool saveIndex(Index *index) {
     return false;
 }
 
-void deleteIndex(Index *index){
+void deleteIndex(Index *index) {
     deleteList(index->list);
     free(index);
 }
 
-size_t getIndexSize(Index* index){
+size_t getIndexSize(Index *index) {
     return listSize(index->list);
 }
 

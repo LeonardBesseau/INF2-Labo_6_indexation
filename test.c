@@ -18,27 +18,6 @@ char *strlwr(char *str) {
     return str;
 }
 
-void test(char *string) {
-    char *newLine;
-    char *endTest;
-    size_t nbLine = 1;
-    newLine = strsep(&string, "\n");
-    while (newLine != NULL) {
-        if (newLine[0] != '\0') {
-            endTest = newLine;
-            char *test;
-            test = strsep(&endTest, " ,?.;[]!-");
-            while (test != NULL) {
-                if (test[0] != '\0') {
-                    printf("%s\n", strlwr(test));
-                }
-                test = strsep(&endTest, " ,?.;[]!-");
-            }
-        }
-        newLine = strsep(&string, "\n");
-    }
-}
-
 void test2(char *string) {
     char *p = string;
     char *word = string;

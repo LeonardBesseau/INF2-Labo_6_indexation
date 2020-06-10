@@ -6,6 +6,7 @@
 #define LABO_6_INDEXATION_READ_FILE_H
 
 
-int read(void (*test2)(char *string));
+
+int read(const char* fileName, void (*test2)(char *string));
 
 #endif //LABO_6_INDEXATION_READ_FILE_H
