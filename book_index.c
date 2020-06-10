@@ -60,13 +60,22 @@ bool analyseString(List *index, List *stopWords, char *string, int* line) {
                 word = ++p;
                 break;
             case '.':
+            case '|':
+            case '_':
             case '[':
             case ']':
+            case '#':
             case '<':
+            case '>':
+            case '@':
+            case '`':
             case '(':
             case ')':
+            case '*':
             case '"':
             case ',':
+            case '=':
+            case '/':
             case '?':
             case '-':
             case '!':

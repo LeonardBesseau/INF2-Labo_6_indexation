@@ -88,9 +88,11 @@ int main(int argc, char *argv[]) {
     if (!checkFileExist(argv[2])) {
         char ch = ' ';
         do {
-            printf("File index.txt already exist.\n Do you want to overwrite it ? y/n");
+            if (ch != '\n'){
+                printf("Output file already exist.\nDo you want to overwrite it ? y/n");
+            }
             ch = getchar();
-        } while (ch != 'y' && ch != 'n');
+        } while ( ch != 'y' && ch != 'n');
         if (ch == 'n') {
             return EXIT_FAILURE;
         }
