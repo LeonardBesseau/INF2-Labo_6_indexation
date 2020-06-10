@@ -106,11 +106,11 @@ Index *createIndex() {
     return index;
 }
 
-bool analyseLine(Index *index, Index *stopWords, char *word, int* line) {
+bool analyseText(Index *index, Index *stopWords, char *text, int* line) {
     if (stopWords){
-        return analyseString(index->list, stopWords->list, word, line);
+        return analyseString(index->list, stopWords->list, text, line);
     }else{
-        return analyseString(index->list, NULL, word, line);
+        return analyseString(index->list, NULL, text, line);
     }
 
 }

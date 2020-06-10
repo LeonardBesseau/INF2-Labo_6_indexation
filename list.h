@@ -18,7 +18,11 @@ Compilateur : gcc version 7.4.0
 #include <stdlib.h>
 #include <stdio.h>
 
+/**
+ * Type definition
+ */
 typedef struct LinkedList List;
+
 /**
  * @category Constructor Destructor
  */
@@ -31,7 +35,6 @@ List *createEmptyList();
 
 /**
  * Delete list and free memory
- * @attention data given to it is free by the list
  * @param l a pointer to the list
  */
 void deleteList(List *l);

@@ -106,7 +106,7 @@ int main(int argc, char *argv[]) {
             deleteIndex(stopWords);
             return EXIT_FAILURE;
         }
-        read(argv[3], analyseLine, stopWords, NULL);
+        read(argv[3], analyseText, stopWords, NULL);
     }
 
     // "/home/leonard/Downloads/macbeth.txt" "/home/leonard/Downloads/stopwords.txt"
@@ -114,11 +114,13 @@ int main(int argc, char *argv[]) {
     Index *index = createIndex();
 
 
-    read(argv[1], analyseLine, index, stopWords);
+    read(argv[1], analyseText, index, stopWords);
     displayIndex(index, stdout);
 
     printf("%zu", getIndexSize(index));
-    saveIndex(index,argv[2]);
+    if(!saveIndex(index,argv[2])){
+        fprintf(stderr, "Error when writing to file");
+    }
 
     deleteIndex(index);
     deleteIndex(stopWords);

@@ -2,7 +2,7 @@
 #include <string.h>
 
 /**
- * Swap memory of element
+ * Swap element
  */
 #define swap(x, y) do \
    { unsigned char swap_temp[sizeof(x) == sizeof(y) ? (signed)sizeof(x) : -1]; \
