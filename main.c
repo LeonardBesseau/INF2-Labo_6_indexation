@@ -109,11 +109,7 @@ int main(int argc, char *argv[]) {
         read(argv[3], analyseText, stopWords, NULL);
     }
 
-    // "/home/leonard/Downloads/macbeth.txt" "/home/leonard/Downloads/stopwords.txt"
-    //
     Index *index = createIndex();
-
-
     read(argv[1], analyseText, index, stopWords);
     displayIndex(index, stdout);
 

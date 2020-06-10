@@ -39,7 +39,7 @@ bool analyseString(List *index, List *stopWords, char *string, int* line) {
                         if (forbidden){
                             deleteHeading(heading);
                         }else{
-                            if (insertInOrder(index, heading, &ptr)) {
+                            if (insertInOrder(index, heading, (void **) &ptr)) {
                                 if (ptr) {
                                     if (getLastPage(ptr) != *line) {
                                         addPage(ptr, *line);
