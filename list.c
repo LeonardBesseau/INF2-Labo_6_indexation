@@ -197,7 +197,7 @@ void pop_back(List *l) {
 bool insertInOrder(List *l, void *data, void **out) {
     Node *cur = beginNode(l);
     while (cur != endNode(l)) {
-        int cmp = l->cmp(cur->data, data);
+        int cmp = l->cmp(data,cur->data);
         if (cmp < 0) {
             bool result = insertNode(cur, data);
             l->size = result ? l->size + 1 : l->size;
