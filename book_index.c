@@ -34,20 +34,19 @@ bool analyseString(List * index, char* string){
             case ' ':
                 *p = '\0';
                 if (strlen(word) >= 3) {
+                    Heading *ptr = NULL;
                     Heading *heading = createHeading(strlwr(word));
-                    if(heading){
-                        Heading *ptr = getElement(index, heading);
+                    if(insertInOrder(index, heading, &ptr)){
                         if (ptr) {
-                            int* page = getLastPage(ptr, line);
-                            if (*page != line){
+                            if (getLastPage(ptr) != line){
                                 addPage(ptr, line);
                             }
-                            destroyHeading(heading);
+                            deleteHeading(heading);
                         } else {
                             addPage(heading, line);
-                            pushBack(index, heading);
                         }
                     }else{
+                        deleteHeading(heading);
                         return false;
                     }
                 }
@@ -81,11 +80,11 @@ bool analyseString(List * index, char* string){
 }
 
 Index *createIndex() {
-    Index* index = (Index *) malloc(sizeof(Index));
+    Index* index = malloc(sizeof(Index));
     index->list = createEmptyList();
     if (index->list) {
         setDisplay(index->list, displayHeading);
-        setCleanup(index->list, destroyHeading);
+        setCleanup(index->list, deleteHeading);
         setCompare(index->list, compareHeading);
     }
     return index;
@@ -97,7 +96,7 @@ bool analyseLine(Index *index, char *line){
 
 void displayIndex(Index *index){
     sortList(index->list);
-    displayList(index->list);
+    displayList(index->list, false);
 }
 
 bool saveIndex(Index *index){

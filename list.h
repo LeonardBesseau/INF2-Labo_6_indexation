@@ -50,7 +50,7 @@ bool isListEmpty(const List *l);
 /**
  * Gets the number of element in the list
  * @param l a pointer to the list
- * @return a size_t the number of element
+ * @return a size_t the number of elements
  */
 size_t listSize(const List *l);
 
@@ -114,18 +114,30 @@ bool pushBack(List *l, void *data);
 void pop_back(List *l);
 
 /**
+ * Add an element in place
+ * @param l a pointer to the list
+ * @param data a void pointer of the element to add.
+ * @param out a void pointer to the data if already present
+ * @return true if the insertion has been effectuated or was already present. False otherwise.
+ * @attention Complexity O(N)
+ */
+bool insertInOrder(List *l, void *data, void** out);
+
+/**
  * @category Operation
  */
 
 /**
  * Display the list on the standard output
  * @param l a pointer to the list
+ * @param separator a boolean, set to true to enable separator
  */
-void displayList(const List *l);
+void displayList(const List *l, bool separator);
 
 /**
  * Sort the list
  * @param l a pointer to the list
+ * @details sorted with a selection sort O(n²)
  */
 void sortList(List *l);
 

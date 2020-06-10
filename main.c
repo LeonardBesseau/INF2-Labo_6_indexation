@@ -6,7 +6,6 @@
 #include "book_index.h"
 
 
-
 int main() {
 //*
     char str[] = "1606\n"
@@ -1274,7 +1273,7 @@ int main() {
                  "    Only for them, and mine eternal jewel\n"
                  "    Given to the common enemy of man,\n"
                  "    To make them kings -the seed of Banquo kings!\n"
-                 "    Rather than so, come, Fate, into the list,\n"
+                 "    Rather than so, come, Fate, into the location,\n"
                  "    And champion me to the utterance! Who's there?\n"
                  "\n"
                  "        Re-enter Attendant, with two Murtherers.\n"

@@ -1,6 +1,10 @@
 #include "list.h"
 #include <string.h>
+#include <stdio.h>
 
+/**
+ * Swap memory of element
+ */
 #define swap(x, y) do \
    { unsigned char swap_temp[sizeof(x) == sizeof(y) ? (signed)sizeof(x) : -1]; \
      memcpy(swap_temp,&y,sizeof(x)); \
@@ -8,8 +12,19 @@
      memcpy(&x,swap_temp,sizeof(x)); \
     } while(0)
 
-
 typedef struct LinkedNode Node;
+
+Node *createNode(Node *next, Node *prev, void *data);
+
+void eraseNode(Node *m, void (*destroy)(void *));
+
+Node *beginNode(const List *l);
+
+Node *endNode(const List *l);
+
+bool insertNode(Node *m, void *value);
+
+void swapNode(Node *a, Node *b);
 
 
 struct LinkedNode {
@@ -29,21 +44,8 @@ struct LinkedList {
     void (*display)(const void *);
 };
 
-
-Node *createNode(Node *next, Node *prev, void *data);
-
-void eraseNode(Node *m, void (*destroy)(void *));
-
-Node *beginNode(const List *l);
-
-Node *endNode(const List *l);
-
-bool insertNode(Node *m, void *value);
-
-void swapNode(Node *a, Node *b);
-
 Node *createNode(Node *next, Node *prev, void *data) {
-    Node *output = (Node *) malloc(sizeof(Node));
+    Node *output = malloc(sizeof(Node));
     if (output) {
         output->next = next;
         output->prev = prev;
@@ -102,7 +104,7 @@ void swapNode(Node *a, Node *b) {
 
 
 List *createEmptyList() {
-    List *out = (List *) malloc(sizeof(List));
+    List *out = malloc(sizeof(List));
     if (out) {
 
         out->bfbl = createNode(NULL, NULL, NULL);
@@ -122,6 +124,14 @@ List *createEmptyList() {
     return NULL;
 }
 
+void deleteList(List *l) {
+    while (!isListEmpty(l)) {
+        eraseNode(l->bfbl->next, l->destroy);
+    }
+    free(l->bfbl);
+    free(l);
+}
+
 bool isListEmpty(const List *l) {
     return beginNode(l) == endNode(l);
 }
@@ -129,7 +139,6 @@ bool isListEmpty(const List *l) {
 size_t listSize(const List *l) {
     return l->size;
 }
-
 
 void *front(const List *l) {
     if (!isListEmpty(l)) {
@@ -139,11 +148,23 @@ void *front(const List *l) {
     return NULL;
 }
 
-void *back(const List *l){
+void *back(const List *l) {
     if (!isListEmpty(l)) {
         Node *n = endNode(l)->prev;
         return n->data;
     }
+    return NULL;
+}
+
+void *getElement(List *l, const void *a) {
+    Node *cur = beginNode(l);
+    while (cur != endNode(l)) {
+        if (!l->cmp(cur->data, a)) {
+            return cur->data;
+        }
+        cur = cur->next;
+    }
+
     return NULL;
 }
 
@@ -162,7 +183,6 @@ bool pushBack(List *l, void *data) {
 
 void pop_front(List *l) {
     if (!isListEmpty(l)) {
-
         eraseNode(beginNode(l), l->destroy);
         --l->size;
     }
@@ -170,63 +190,45 @@ void pop_front(List *l) {
 
 void pop_back(List *l) {
     if (!isListEmpty(l)) {
-
         eraseNode(endNode(l)->prev, l->destroy);
-
         --l->size;
     }
 }
 
-void deleteList(List *l) {
-    static int test = 0;
-    while (!isListEmpty(l)) {
-        ++test;
-        int a = *((int*) l->bfbl->next->data);
-        eraseNode(l->bfbl->next, l->destroy);
-    }
-
-    free(l->bfbl);
-    free(l);
-}
-
-void setCleanup(List *l, void (*destroy)(void *)) {
-    l->destroy = destroy;
-}
-
-
-void setDisplay(List *l, void (*display)(const void *)) {
-    l->display = display;
-}
-
-void setCompare(List *l, int(*cmp)(const void *a, const void *b)) {
-    l->cmp = cmp;
-}
-
-
-void displayList(const List *l) {
+bool insertInOrder(List *l, void *data, void **out) {
     Node *cur = beginNode(l);
     while (cur != endNode(l)) {
-        l->display(cur->data);
-        cur = cur->next;
-    }
-}
-
-
-
-void *getElement(List *l, const void *a) {
-    Node *cur = beginNode(l);
-    while (cur != endNode(l)) {
-        if (!l->cmp(cur->data, a)) {
-            return cur->data;
+        int cmp = l->cmp(cur->data, data);
+        if (cmp < 0) {
+            bool result = insertNode(cur, data);
+            l->size = result ? l->size + 1 : l->size;
+            return result;
+        } else if (cmp == 0) {
+            *out = cur->data;
+            return true;
         }
         cur = cur->next;
     }
+    return pushBack(l, data);
+}
 
-    return NULL;
+void displayList(const List *l, bool separator) {
+    Node *cur = beginNode(l);
+    Node* end = endNode(l);
+    bool loop = cur != end;
+    while (loop) {
+        l->display(cur->data);
+        cur = cur->next;
+        loop = cur != end;
+        if (separator && loop){
+            printf(", ");
+        }
+    }
+    printf("\n");
 }
 
 void sortList(List *l) {
-    if(l->size < 2){
+    if (l->size < 2) {
         return;
     }
     Node *j = beginNode(l);
@@ -246,5 +248,15 @@ void sortList(List *l) {
     }
 }
 
+void setCleanup(List *l, void (*destroy)(void *)) {
+    l->destroy = destroy;
+}
 
 
+void setDisplay(List *l, void (*display)(const void *)) {
+    l->display = display;
+}
+
+void setCompare(List *l, int(*cmp)(const void *a, const void *b)) {
+    l->cmp = cmp;
+}
