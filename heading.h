@@ -1,7 +1,7 @@
 /* ---------------------------
-Laboratoire :
+Laboratoire : 6
 Fichier : heading.h
-Auteur(s) : Besseau
+Auteur(s) : Besseau Cerottini Viotti
 Date : 15-06-2020
 
 But : Structure contenant un mot ainsi que la liste des ses occurences dans un texte

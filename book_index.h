@@ -1,7 +1,7 @@
 /* ---------------------------
-Laboratoire :
+Laboratoire : 6
 Fichier : book_index.h
-Auteur(s) : Besseau
+Auteur(s) : Besseau Cerottini Viotti
 Date : 15-06-2020
 
 But : Fournir une structure listant des headings afin de génerer l'index d'un texte

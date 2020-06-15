@@ -1,7 +1,7 @@
 /* ---------------------------
-Laboratoire :
+Laboratoire : 6
 Fichier : list.h
-Auteur(s) : Besseau
+Auteur(s) : Besseau Cerottini Viotti
 Date : 02-06-2020
 
 But : Fournir une structure liste génerique pouvant contenir n'importe quel données

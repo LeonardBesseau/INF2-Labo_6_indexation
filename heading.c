@@ -1,10 +1,10 @@
 /* ---------------------------
-Laboratoire :
-Fichier : heading.c
-Auteur(s) : Besseau
-Date : 02-06-2020
+Laboratoire : 6
+Fichier : heading.h
+Auteur(s) : Besseau Cerottini Viotti
+Date : 15-06-2020
 
-But :
+But : Structure contenant un mot ainsi que la liste des ses occurences dans un texte
 
 Remarque(s) :
 

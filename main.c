@@ -1,7 +1,7 @@
 /* ---------------------------
-Laboratoire :
+Laboratoire : 6
 Fichier : main.c
-Auteur(s) : Besseau
+Auteur(s) : Besseau Cerottini Viotti
 Date : 15-06-2020
 
 But : Programme fournissant une ligne de commande pour générer l'index d'un texte
@@ -45,7 +45,8 @@ int main(int argc, char *argv[]) {
             fprintf(stderr, "Wrong argument");
             return EXIT_FAILURE;
         } else {
-            printf("No help for you");
+            printf("Usage : index INDEX FILE OUTPUT FILE [STOPWORDS FILE]\n");
+            printf("\t-h display help");
             return EXIT_SUCCESS;
         }
     }
