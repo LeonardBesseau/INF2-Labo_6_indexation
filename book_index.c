@@ -98,12 +98,7 @@ bool analyseString(List *index, List *stopWords, char *string, int* line) {
             case ';':
             case ':':
             case '\'':
-                *p = ' ';
-                break;
             case '\n':
-                if (*(p + 1) != '\n') {
-                    ++line;
-                }
                 *p = ' ';
                 break;
             default:
