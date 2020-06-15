@@ -4,7 +4,7 @@ Fichier : list.h
 Auteur(s) : Besseau
 Date : 02-06-2020
 
-But :
+But : Fournir une structure liste génerique pouvant contenir n'importe quel données
 
 Remarque(s) :
 

@@ -1,7 +1,16 @@
-//
-// Created by leonard on 6/2/20.
-//
+/* ---------------------------
+Laboratoire :
+Fichier : heading.h
+Auteur(s) : Besseau
+Date : 15-06-2020
 
+But : Structure contenant un mot ainsi que la liste des ses occurences dans un texte
+
+Remarque(s) :
+
+Compilateur : gcc version 7.4.0
+
+--------------------------- */
 #ifndef LABO_6_INDEXATION_HEADING_H
 #define LABO_6_INDEXATION_HEADING_H
 
@@ -96,7 +105,7 @@ void setHeadingWord(void *heading, char *word);
  */
 
 /**
- * Display the heading on the standard output
+ * Display the heading on a given output
  * @param heading a pointer to the heading
  * @param output a pointer to the output
  */

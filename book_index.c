@@ -4,6 +4,9 @@
 #include "heading.h"
 #include "list.h"
 
+
+#define CHUNK 256
+
 struct ListIndex {
     List *list;
 };
@@ -85,6 +88,9 @@ bool analyseString(List *index, List *stopWords, char *string, int* line) {
                 *p = ' ';
                 break;
             case '\n':
+                if (*(p + 1) != '\n') {
+                    ++line;
+                }
                 *p = ' ';
                 break;
             default:
@@ -142,5 +148,43 @@ void deleteIndex(Index *index) {
 
 size_t getIndexSize(Index *index) {
     return listSize(index->list);
+}
+
+int addToIndexFromFiles(const char *fileName, Index *index, Index *stopWords) {
+    FILE *file;
+
+    file = fopen(fileName, "r");
+    if (file) {
+        char *buf = malloc(CHUNK);
+
+        if (buf == NULL) {
+            return EXIT_FAILURE;
+        }
+        int line = 0;
+        while (fgets(buf, CHUNK, file)) {
+            ++line;
+            if (buf[0] == '\n') {
+                continue;
+            }
+            if (!analyseText(index, stopWords, buf, &line)) {
+                free(buf);
+                return EXIT_FAILURE;
+            }
+            free(buf);
+            buf = malloc(CHUNK);
+            if (buf == NULL) {
+                return EXIT_FAILURE;
+            }
+        }
+        free(buf);
+        if (ferror(file)) {
+            return EXIT_FAILURE;
+        }
+        fclose(file);
+    } else {
+        fprintf(stderr, "Sorry, file doesn't exist.");
+        return EXIT_FAILURE;
+    }
+    return EXIT_SUCCESS;
 }
 
