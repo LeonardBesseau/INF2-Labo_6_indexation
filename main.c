@@ -34,7 +34,21 @@ int checkFileExist(const char *fileName) {
     }
 }
 
+/*
+ * Execution time measured (with time command on linux)
+ * Macbeth with stopwords ~170 ms (average 10 tries)
+ * Macbeth without stopwords ~270 ms (average 10 tries)
+ * All with stopwords ~110800 ms (1m50.800ms) (average 5 tries)
+ * All without stopwords ~210800 ms (3m30.500ms) (average 5 tries)
+ */
 
+/**
+ * Main function
+ * @param argc argument count
+ * @param argv argument list . -h for help
+ * need a path to a file to read. A path to a file to write to. Optionally, a file to read stopwords
+ * @return EXIT_SUCCESS if operation succeeded. EXIT_FAILURE otherwise
+ */
 int main(int argc, char *argv[]) {
     if (argc < 2 || argc > 4) {
         fprintf(stderr, "Argument count invalid");
@@ -87,7 +101,6 @@ int main(int argc, char *argv[]) {
         deleteIndex(index);
         fprintf(stderr, "An error occurred during the proccess");
     }
-    displayIndex(index, stdout);
 
     printf("%zu", getIndexSize(index));
     if (!saveIndex(index, argv[2])) {
